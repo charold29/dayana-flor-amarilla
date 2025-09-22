@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # Título principal
-st.title("Hola, feliz inicio de primavera monga :)")
+st.title("Feliz inicio de primavera monga :)")
 
 # Placeholder para la animación
 placeholder = st.empty()
