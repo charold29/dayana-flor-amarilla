@@ -1,8 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Ellipse, Circle
-import matplotlib.patches as patches
+import time
 
 # Configuración de la página
 st.set_page_config(
@@ -14,127 +13,101 @@ st.set_page_config(
 # Título principal
 st.title("Hola, feliz inicio de primavera monga :) 🌷")
 
-# Función para dibujar el tulipán
-def dibujar_tulipan():
-    fig, ax = plt.subplots(figsize=(10, 12))
-    
-    # Configurar límites y aspecto
-    ax.set_xlim(-3, 3)
-    ax.set_ylim(-2, 8)
-    ax.set_aspect('equal')
-    
-    # Ocultar ejes
-    ax.axis('off')
-    
-    # Color de fondo suave
-    fig.patch.set_facecolor('#f0f8ff')
-    
-    # Dibujar el tallo (verde)
-    tallo = patches.Rectangle((-0.1, -2), 0.2, 4, 
-                             facecolor='#228B22', 
-                             edgecolor='#006400', 
-                             linewidth=2)
-    ax.add_patch(tallo)
-    
-    # Dibujar hojas (verde)
-    # Hoja izquierda
-    hoja_izq = patches.Ellipse((-1.2, 0.5), 1.5, 0.8, 
-                              angle=45,
-                              facecolor='#32CD32', 
-                              edgecolor='#228B22',
-                              linewidth=2)
-    ax.add_patch(hoja_izq)
-    
-    # Hoja derecha
-    hoja_der = patches.Ellipse((1.2, 0.5), 1.5, 0.8, 
-                              angle=-45,
-                              facecolor='#32CD32', 
-                              edgecolor='#228B22',
-                              linewidth=2)
-    ax.add_patch(hoja_der)
-    
-    # Dibujar pétalos del tulipán (amarillo)
-    # Pétalo central trasero
-    petalo1 = patches.Ellipse((0, 4), 1.2, 2.5,
-                             facecolor='#FFD700',
-                             edgecolor='#FFA500',
-                             linewidth=2,
-                             alpha=0.9)
-    ax.add_patch(petalo1)
+# Placeholder para la animación
+placeholder = st.empty()
+
+# Coordenadas del tulipán (muy simple)
+def get_tulipan_coords():
+    # Tallo (línea vertical)
+    tallo_x = [0, 0]
+    tallo_y = [0, 3]
     
     # Pétalo izquierdo
-    petalo2 = patches.Ellipse((-0.8, 4.2), 1.0, 2.2,
-                             angle=15,
-                             facecolor='#FFFF00',
-                             edgecolor='#FFA500',
-                             linewidth=2,
-                             alpha=0.9)
-    ax.add_patch(petalo2)
+    petalo_izq_x = [0, -0.8, -0.5, 0]
+    petalo_izq_y = [3, 4.5, 5.2, 4.8]
     
-    # Pétalo derecho
-    petalo3 = patches.Ellipse((0.8, 4.2), 1.0, 2.2,
-                             angle=-15,
-                             facecolor='#FFFF00',
-                             edgecolor='#FFA500',
-                             linewidth=2,
-                             alpha=0.9)
-    ax.add_patch(petalo3)
+    # Pétalo derecho  
+    petalo_der_x = [0, 0.8, 0.5, 0]
+    petalo_der_y = [3, 4.5, 5.2, 4.8]
     
-    # Pétalo central delantero (más brillante)
-    petalo4 = patches.Ellipse((0, 4.5), 0.8, 2.0,
-                             facecolor='#FFFF66',
-                             edgecolor='#FFD700',
-                             linewidth=2)
-    ax.add_patch(petalo4)
+    # Pétalo central
+    petalo_centro_x = [0, 0, 0]
+    petalo_centro_y = [3, 5.5, 4.8]
     
-    # Agregar centro de la flor
-    centro = Circle((0, 3.5), 0.2, 
-                   facecolor='#FF8C00',
-                   edgecolor='#FF6347',
-                   linewidth=1)
-    ax.add_patch(centro)
+    # Hoja izquierda
+    hoja_izq_x = [-0.1, -1.2, -0.8, -0.1]
+    hoja_izq_y = [1.5, 2.5, 3.2, 2.8]
     
-    # Agregar algunos detalles decorativos (pequeñas líneas en los pétalos)
-    for i in range(3):
-        ax.plot([0, 0], [3.2 + i*0.3, 3.4 + i*0.3], 
-               color='#FFA500', linewidth=1, alpha=0.6)
+    # Hoja derecha
+    hoja_der_x = [0.1, 1.2, 0.8, 0.1]
+    hoja_der_y = [1.5, 2.5, 3.2, 2.8]
     
-    # Título en la imagen
-    ax.text(0, 7, '🌷 ¡Feliz Primavera! 🌷', 
-           ha='center', va='center', 
-           fontsize=20, fontweight='bold',
-           color='#FF69B4',
-           bbox=dict(boxstyle="round,pad=0.3", 
-                    facecolor='white', 
-                    edgecolor='#FF69B4',
-                    alpha=0.8))
-    
-    return fig
+    return [
+        (tallo_x, tallo_y, 'green', 'Tallo'),
+        (hoja_izq_x, hoja_izq_y, 'lightgreen', 'Hoja izquierda'),
+        (hoja_der_x, hoja_der_y, 'lightgreen', 'Hoja derecha'),
+        (petalo_izq_x, petalo_izq_y, 'gold', 'Pétalo izquierdo'),
+        (petalo_der_x, petalo_der_y, 'gold', 'Pétalo derecho'),
+        (petalo_centro_x, petalo_centro_y, 'yellow', 'Pétalo central')
+    ]
 
-# Crear y mostrar el tulipán
-st.write("## 🌸 Tu tulipán amarillo está aquí 🌸")
+# Función para dibujar progresivamente
+def dibujar_tulipan_animado():
+    partes = get_tulipan_coords()
+    
+    # Configurar la figura
+    fig, ax = plt.subplots(figsize=(8, 10))
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-0.5, 6)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    fig.patch.set_facecolor('white')
+    
+    # Dibujar cada parte progresivamente
+    for parte_idx, (x_coords, y_coords, color, nombre) in enumerate(partes):
+        # Mostrar qué se está dibujando
+        st.write(f"✏️ Dibujando: {nombre}...")
+        
+        # Dibujar línea por línea
+        for i in range(1, len(x_coords)):
+            # Limpiar y redibujar todo hasta este punto
+            ax.clear()
+            ax.set_xlim(-2, 2)
+            ax.set_ylim(-0.5, 6)
+            ax.set_aspect('equal')
+            ax.axis('off')
+            
+            # Dibujar partes anteriores completas
+            for prev_idx in range(parte_idx):
+                prev_x, prev_y, prev_color, _ = partes[prev_idx]
+                ax.plot(prev_x, prev_y, color=prev_color, linewidth=3)
+                ax.fill(prev_x, prev_y, color=prev_color, alpha=0.6)
+            
+            # Dibujar la parte actual hasta el punto i
+            current_x = x_coords[:i+1]
+            current_y = y_coords[:i+1]
+            ax.plot(current_x, current_y, color=color, linewidth=3)
+            
+            # Si es el último punto de la parte, rellenar
+            if i == len(x_coords) - 1:
+                ax.fill(x_coords, y_coords, color=color, alpha=0.6)
+            
+            # Actualizar la visualización
+            with placeholder.container():
+                st.pyplot(fig, use_container_width=True)
+            
+            # Pausa para el efecto de animación
+            time.sleep(0.8)
+    
+    # Mensaje final
+    st.success("¡🌷 Tu tulipán amarillo está completo! 🌷")
+    st.balloons()
 
-# Centrar la imagen
-col1, col2, col3 = st.columns([1, 2, 1])
+# Botón para iniciar la animación
+if st.button("🎨 ¡Empezar a dibujar el tulipán!", type="primary"):
+    dibujar_tulipan_animado()
 
-with col2:
-    fig = dibujar_tulipan()
-    st.pyplot(fig, use_container_width=True)
-
-# Mensaje adicional
+# Instrucciones
 st.write("---")
-st.markdown("""
-### 🌺 ¡Que tengas un día lleno de flores y alegría! 🌺
-
-La primavera trae consigo nuevos comienzos, colores vibrantes y la promesa de días más cálidos. 
-¡Espero que este tulipán amarillo brighte tu día tanto como tú brighteas el mío! 
-
-*¡Disfruta esta hermosa temporada!* ✨
-""")
-
-# Agregar algunos emojis decorativos
-st.write("🌷 🌸 🌺 🌻 🌹 🌼 🌷 🌸 🌺 🌻 🌹 🌼")
-
-# Footer
-st.write("---")
-st.write("*Hecho con ❤️ y Python para celebrar la primavera*")
+st.write("👆 **¡Haz clic en el botón para ver cómo se dibuja tu tulipán amarillo paso a paso!**")
+st.write("🌸 Cada parte se dibujará como si fuera un lápiz mágico creando tu flor de primavera 🌸")
