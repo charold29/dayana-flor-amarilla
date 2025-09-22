@@ -65,8 +65,6 @@ def dibujar_tulipan_animado():
     
     # Dibujar cada parte progresivamente
     for parte_idx, (x_coords, y_coords, color, nombre) in enumerate(partes):
-        # Mostrar qué se está dibujando
-        st.write(f"✏️ Dibujando: {nombre}...")
         
         # Dibujar línea por línea
         for i in range(1, len(x_coords)):
@@ -108,4 +106,4 @@ if st.button("🎨 Has click aquí", type="primary"):
 
 # Instrucciones
 st.write("---")
-st.write("👆 **¡Haz clic en el botón para ver cómo se dibuja tu tulipán amarillo paso a paso!**")
+st.write("👆 Haz click aquí")
