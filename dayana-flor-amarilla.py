@@ -101,4 +101,4 @@ def dibujar_tulipan_animado():
 if st.button("🎨 Has click aquí", type="primary"):
     dibujar_tulipan_animado()
 
-st.write("👆Click👆")
+st.write("👆Click arriba")
