@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # Título principal
-st.title("Hola, feliz inicio de primavera monga :) 🌷")
+st.title("Hola, feliz inicio de primavera monga :)")
 
 # Placeholder para la animación
 placeholder = st.empty()
@@ -96,9 +96,6 @@ def dibujar_tulipan_animado():
             
             # Pausa para el efecto de animación
             time.sleep(0.8)
-    
-    # Mensaje final
-    st.success("¡🌷 Tu tulipán amarillo está completo! 🌷")
 
 # Botón para iniciar la animación
 if st.button("🎨 Has click aquí", type="primary"):
@@ -106,4 +103,4 @@ if st.button("🎨 Has click aquí", type="primary"):
 
 # Instrucciones
 st.write("---")
-st.write("👆 Haz click aquí")
+st.write("👆👆")
