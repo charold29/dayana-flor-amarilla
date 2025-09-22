@@ -101,13 +101,11 @@ def dibujar_tulipan_animado():
     
     # Mensaje final
     st.success("¡🌷 Tu tulipán amarillo está completo! 🌷")
-    st.balloons()
 
 # Botón para iniciar la animación
-if st.button("🎨 ¡Empezar a dibujar el tulipán!", type="primary"):
+if st.button("🎨 Has click aquí", type="primary"):
     dibujar_tulipan_animado()
 
 # Instrucciones
 st.write("---")
 st.write("👆 **¡Haz clic en el botón para ver cómo se dibuja tu tulipán amarillo paso a paso!**")
-st.write("🌸 Cada parte se dibujará como si fuera un lápiz mágico creando tu flor de primavera 🌸")
